@@ -2,12 +2,21 @@
 
 # dependencies
 node_modules/
+.npm/
+.pnpm-store/
+.yarn/cache/
+.yarn/unplugged/
 
 # Expo
 .expo/
+.expo-shared/
 dist/
 web-build/
 expo-env.d.ts
+.eas/
+*.apk
+*.aab
+*.ipa
 
 # Native
 .kotlin/
@@ -17,24 +26,66 @@ expo-env.d.ts
 *.p12
 *.key
 *.mobileprovision
+*.keystore
+*.der
+/ios/Pods/
+/ios/build/
+/android/.gradle/
+/android/app/build/
+/android/build/
 
 # Metro
 .metro-health-check*
+.watchmanconfig.local
 
 # debug
 npm-debug.*
 yarn-debug.*
 yarn-error.*
+pnpm-debug.log*
+*.log
+*.pid
+*.pid.lock
 
 # macOS
 .DS_Store
+._*
 *.pem
+Thumbs.db
 
-# local env files
-.env*.local
+# environment and local configuration
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.local
 
 # typescript
 *.tsbuildinfo
+
+# tests and coverage
+coverage/
+.nyc_output/
+test-results/
+
+# tool caches and editor settings
+.cache/
+.eslintcache
+.stylelintcache
+.turbo/
+.idea/
+.vscode/
+*.code-workspace
+*.swp
+*.swo
+*~
+
+# temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+*.bak
 
 # generated native folders
 /ios

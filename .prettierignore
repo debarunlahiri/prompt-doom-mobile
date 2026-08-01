@@ -1,0 +1,12 @@
+node_modules/
+.expo/
+.expo-shared/
+dist/
+web-build/
+coverage/
+.nyc_output/
+test-results/
+ios/
+android/
+*.log
+*.min.js
