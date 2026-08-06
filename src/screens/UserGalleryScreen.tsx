@@ -65,9 +65,7 @@ export function UserGalleryScreen({ history = false }: { history?: boolean }) {
         const response = history
           ? await userApi.history(nextPage)
           : await userApi.favorites(nextPage);
-        const next = history
-          ? response.items.map((item: { image: GalleryImage }) => item.image)
-          : response.items;
+        const next = response.items;
         setItems((current) =>
           nextPage === 1
             ? next
@@ -80,11 +78,14 @@ export function UserGalleryScreen({ history = false }: { history?: boolean }) {
               ],
         );
         setPage(nextPage);
-        setHasMore(
-          history
-            ? next.length === 20
-            : nextPage < (response.pagination.totalPages ?? nextPage),
-        );
+        if (history) {
+          setHasMore("hasMore" in response && response.hasMore);
+        } else {
+          setHasMore(
+            "pagination" in response &&
+              nextPage < (response.pagination.totalPages ?? nextPage),
+          );
+        }
         if (!history)
           next.forEach((image: GalleryImage) => setFavorite(image.id, true));
         setError("");

@@ -5,12 +5,12 @@ A React Native app for discovering AI artwork and viewing prompts through the su
 ## Configure
 
 1. Copy `.env.example` to `.env`.
-2. Set `EXPO_PUBLIC_API_URL` to the API origin without `/api/v1` (the app adds that path).
+2. Set `EXPO_PUBLIC_API_URL` to the complete v1 API URL. For a physical device, use the development computer's LAN IP instead of `localhost`, for example `http://192.168.0.158:8080/prompt-doom/api/v1`.
 3. Android uses the configured Prompt Doom AdMob App ID and interstitial unit. `EXPO_PUBLIC_ADMOB_INTERSTITIAL_ID` can override the interstitial unit for a particular build.
 
 The supplied Android banner, interstitial, rewarded interstitial, rewarded, and app-open unit IDs are centralized in `src/config.ts`. Only the interstitial has a product-approved placement: immediately before the authenticated prompt, subject to `/ads/config`. Other formats are not displayed until an appropriate user experience is defined. iOS continues to use Google's test App ID and test interstitial because no iOS identifiers were supplied.
 
-No custom AI service is used. When the variable is absent, local development uses `http://192.168.0.158:3200/api/v1`.
+No custom AI service is used. When the variable is absent, local development uses `http://192.168.0.158:8080/prompt-doom/api/v1`.
 
 ## Run
 

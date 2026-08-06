@@ -46,7 +46,7 @@ export interface ApiErrorBody {
   error?: {
     code?: string;
     message?: string;
-    details?: Array<{ message?: string }>;
+    details?: Array<{ message?: string }> | Record<string, unknown>;
   };
   message?: string;
 }
@@ -56,6 +56,13 @@ export interface AdConfig {
   showAfterClicks: number;
   minIntervalSeconds: number;
   maxAdsPerSession: number;
+}
+
+export interface HistoryPage {
+  items: GalleryImage[];
+  page: number;
+  limit: number;
+  hasMore: boolean;
 }
 
 export type RootStackParamList = {

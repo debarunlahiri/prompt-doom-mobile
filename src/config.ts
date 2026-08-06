@@ -1,8 +1,8 @@
 const rawApiUrl = process.env.EXPO_PUBLIC_API_URL?.trim();
 
 export const API_BASE_URL = rawApiUrl
-  ? `${rawApiUrl.replace(/\/$/, "")}/api/v1`
-  : "http://192.168.0.158:3200/api/v1";
+  ? rawApiUrl.replace(/\/$/, "")
+  : "http://192.168.0.158:8080/prompt-doom/api/v1";
 
 export const PAGE_SIZE = 20;
 export const APP_NAME = "Prompt Doom";

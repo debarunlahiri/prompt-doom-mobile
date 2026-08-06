@@ -6,6 +6,7 @@ import {
   AdConfig,
   ApiErrorBody,
   GalleryImage,
+  HistoryPage,
   Pagination,
   Tokens,
   User,
@@ -60,8 +61,11 @@ api.interceptors.response.use(undefined, async (error: AxiosError) => {
 export function getErrorMessage(error: unknown) {
   if (axios.isAxiosError<ApiErrorBody>(error)) {
     const body = error.response?.data;
+    const validationMessage = Array.isArray(body?.error?.details)
+      ? body.error.details[0]?.message
+      : undefined;
     return (
-      body?.error?.details?.[0]?.message ??
+      validationMessage ??
       body?.error?.message ??
       body?.message ??
       (error.code === "ECONNABORTED"
@@ -110,7 +114,17 @@ export const userApi = {
     };
   },
   history: async (page = 1, limit = 20) =>
-    (await api.get("/users/history", { params: { page, limit } })).data.data,
+    api.get("/users/history", { params: { page, limit } }).then(({ data }) => {
+      const historyItems = data.data.items as Array<{
+        image: GalleryImage;
+      }>;
+      return {
+        items: historyItems.map((item) => item.image),
+        page: data.data.page as number,
+        limit: data.data.limit as number,
+        hasMore: historyItems.length === limit,
+      } satisfies HistoryPage;
+    }),
 };
 
 export const imageApi = {
@@ -138,8 +152,8 @@ export const imageApi = {
   addFavorite: (id: number) => api.post(`/images/${id}/favorite`),
   removeFavorite: (id: number) => api.delete(`/images/${id}/favorite`),
   copy: (id: number) => api.post(`/images/${id}/copy`),
-  share: (id: number, channel: string) =>
-    api.post(`/images/${id}/share`, { channel }),
+  share: (id: number, destination: string) =>
+    api.post(`/images/${id}/share`, { destination }),
   report: (id: number, reason: string, details?: string) =>
     api.post(`/images/${id}/reports`, {
       reason,
@@ -155,6 +169,6 @@ export const adsApi = {
     eventType: string;
     provider: string;
     placement: string;
-    metadata?: Record<string, string>;
+    metadata?: Record<string, unknown>;
   }) => api.post("/ads/events", body),
 };
