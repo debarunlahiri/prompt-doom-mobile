@@ -36,7 +36,7 @@ import { MenuRow } from "../components/MenuRow";
 import { PromptCard } from "../components/PromptCard";
 import { APP_NAME, LEGAL_CONTENT } from "../config";
 import { useColors } from "../hooks/useColors";
-import { maybeShowAd, recordDetailClick } from "../services/adService";
+import { openImageWithInterstitial } from "../services/adService";
 import { useAppStore } from "../store";
 import { styles } from "../styles";
 import { GalleryImage, User } from "../types";
@@ -122,7 +122,9 @@ export function ExploreScreen({ showHeader = true }: { showHeader?: boolean }) {
           data={results.items}
           colors={colors}
           onPress={(item) =>
-            navigation.navigate("ImageDetail", { imageId: item.id })
+            void openImageWithInterstitial(() =>
+              navigation.navigate("ImageDetail", { imageId: item.id }),
+            ).catch(() => undefined)
           }
           onEndReached={results.loadMore}
           onRefresh={results.refresh}

@@ -16,7 +16,6 @@ import {
   Pressable,
   RefreshControl,
   ScrollView,
-  Share,
   Switch,
   Text,
   TextInput,
@@ -24,19 +23,12 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { authApi, getErrorMessage, imageApi, userApi, adsApi } from "../api";
-import {
-  Button,
-  Field,
-  ImageCard,
-  ImageGrid,
-  ScreenState,
-} from "../components";
+import { Field, ImageCard, ImageGrid, ScreenState } from "../components";
 import { Header } from "../components/Header";
 import { MenuRow } from "../components/MenuRow";
 import { PromptCard } from "../components/PromptCard";
 import { APP_NAME, LEGAL_CONTENT } from "../config";
 import { useColors } from "../hooks/useColors";
-import { maybeShowAd, recordDetailClick } from "../services/adService";
 import { useAppStore } from "../store";
 import { styles } from "../styles";
 import { GalleryImage, User } from "../types";
@@ -47,20 +39,12 @@ export function PromptScreen() {
   const { imageId, title } = useRoute<any>().params;
   const [prompt, setPrompt] = useState<{
     mainPrompt: string;
-    negativePrompt?: string;
   }>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const config = await adsApi.config().catch(() => ({
-        enabled: false,
-        showAfterClicks: 5,
-        minIntervalSeconds: 120,
-        maxAdsPerSession: 3,
-      }));
-      await maybeShowAd(config);
       setPrompt(await imageApi.prompt(imageId));
       setError("");
     } catch (e) {
@@ -74,20 +58,12 @@ export function PromptScreen() {
   }, [load]);
   const copy = async (value: string) => {
     await Clipboard.setStringAsync(value);
-    void imageApi.copy(imageId).catch(() => undefined);
-    Alert.alert("Copied", "Prompt copied to clipboard.");
-  };
-  const share = async () => {
-    if (!prompt) return;
     try {
-      await Share.share({
-        title,
-        message: `${title}\n\nPrompt:\n${prompt.mainPrompt}${prompt.negativePrompt ? `\n\nNegative prompt:\n${prompt.negativePrompt}` : ""}`,
-      });
-      void imageApi.share(imageId, "system").catch(() => undefined);
-    } catch {
-      /* User cancelled. */
+      await imageApi.copy(imageId);
+    } catch (copyError) {
+      console.warn("Prompt copy tracking failed", copyError);
     }
+    Alert.alert("Copied", "Prompt copied to clipboard.");
   };
   if (loading || error || !prompt)
     return (
@@ -113,20 +89,6 @@ export function PromptScreen() {
         title="Main prompt"
         text={prompt.mainPrompt}
         onCopy={() => copy(prompt.mainPrompt)}
-      />
-      {prompt.negativePrompt ? (
-        <PromptCard
-          colors={colors}
-          title="Negative prompt"
-          text={prompt.negativePrompt}
-          onCopy={() => copy(prompt.negativePrompt!)}
-        />
-      ) : null}
-      <Button
-        colors={colors}
-        title="Share prompts"
-        icon="share-social-outline"
-        onPress={share}
       />
     </ScrollView>
   );

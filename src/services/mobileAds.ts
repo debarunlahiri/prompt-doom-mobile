@@ -19,11 +19,15 @@ export function getMobileAdsModule(): Promise<MobileAdsModule | null> {
 }
 
 export async function initializeMobileAds(): Promise<boolean> {
-  const mobileAdsModule = await getMobileAdsModule();
-  if (!mobileAdsModule) return false;
-
   try {
-    await mobileAdsModule.default().initialize();
+    const mobileAdsModule = await getMobileAdsModule();
+    const mobileAds = mobileAdsModule?.default;
+    if (typeof mobileAds !== "function") return false;
+
+    const adsInstance = mobileAds();
+    if (typeof adsInstance?.initialize !== "function") return false;
+
+    await adsInstance.initialize();
     return true;
   } catch {
     return false;

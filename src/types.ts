@@ -30,6 +30,8 @@ export interface GalleryImage {
   publishedAt?: string;
   viewCount?: number;
   copyCount?: number;
+  shareUrl?: string;
+  shareMessage?: string;
   category?: Category;
   tags?: Array<{ tag: { id?: number; name: string } }>;
 }

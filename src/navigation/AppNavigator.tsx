@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
   DarkTheme,
   DefaultTheme,
+  LinkingOptions,
   NavigationContainer,
 } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
@@ -25,6 +26,17 @@ import { formatSlug } from "../utils/format";
 import { MainTabs } from "./MainTabs";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
+const linking: LinkingOptions<RootStackParamList> = {
+  prefixes: ["promptdoom://"],
+  config: {
+    screens: {
+      ImageDetail: {
+        path: "image/:imageId",
+        parse: { imageId: Number },
+      },
+    },
+  },
+};
 
 export function AppNavigator() {
   const colors = useColors();
@@ -41,7 +53,7 @@ export function AppNavigator() {
     },
   };
   return (
-    <NavigationContainer theme={navigationTheme}>
+    <NavigationContainer theme={navigationTheme} linking={linking}>
       <StatusBar style={dark ? "light" : "dark"} />
       <Stack.Navigator
         screenOptions={{
@@ -57,23 +69,16 @@ export function AppNavigator() {
           component={MainTabs}
           options={{ headerShown: false }}
         />
-        <Stack.Screen name="Login" options={{ title: "Sign in" }}>
+        <Stack.Screen
+          name="Login"
+          options={{
+            headerShown: false,
+            presentation: "transparentModal",
+            animation: "slide_from_bottom",
+            contentStyle: { backgroundColor: "transparent" },
+          }}
+        >
           {() => <AuthScreen />}
-        </Stack.Screen>
-        <Stack.Screen name="Register" options={{ title: "Create account" }}>
-          {() => <AuthScreen register />}
-        </Stack.Screen>
-        <Stack.Screen
-          name="ForgotPassword"
-          options={{ title: "Forgot password" }}
-        >
-          {() => <PasswordFlowScreen />}
-        </Stack.Screen>
-        <Stack.Screen
-          name="ResetPassword"
-          options={{ title: "Reset password" }}
-        >
-          {() => <PasswordFlowScreen reset />}
         </Stack.Screen>
         <Stack.Screen
           name="ImageDetail"

@@ -48,7 +48,6 @@ export function EditProfileScreen() {
   const user = useAppStore((state) => state.user)!;
   const setUser = useAppStore((state) => state.setUser);
   const [name, setName] = useState(user.name);
-  const [avatarUrl, setAvatarUrl] = useState(user.avatarUrl ?? "");
   const [busy, setBusy] = useState(false);
   const save = async () => {
     if (name.trim().length < 2)
@@ -57,12 +56,10 @@ export function EditProfileScreen() {
     try {
       await userApi.updateProfile({
         name: name.trim(),
-        avatarUrl: avatarUrl.trim() || null,
       });
       const updated: User = {
         ...user,
         name: name.trim(),
-        avatarUrl: avatarUrl.trim() || null,
       };
       setUser(updated);
       Alert.alert("Saved", "Your profile has been updated.", [
@@ -84,15 +81,6 @@ export function EditProfileScreen() {
           label="Name"
           value={name}
           onChangeText={setName}
-        />
-        <Field
-          colors={colors}
-          label="Avatar URL"
-          value={avatarUrl}
-          onChangeText={setAvatarUrl}
-          keyboardType="url"
-          autoCapitalize="none"
-          placeholder="https://…"
         />
         <Button
           colors={colors}

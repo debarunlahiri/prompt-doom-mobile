@@ -16,7 +16,6 @@ import {
   Pressable,
   RefreshControl,
   ScrollView,
-  Share,
   Switch,
   Text,
   TextInput,
@@ -37,7 +36,7 @@ import { MenuRow } from "../components/MenuRow";
 import { PromptCard } from "../components/PromptCard";
 import { APP_NAME, LEGAL_CONTENT } from "../config";
 import { useColors } from "../hooks/useColors";
-import { maybeShowAd, recordDetailClick } from "../services/adService";
+import { openPromptWithInterstitial } from "../services/adService";
 import { useAppStore } from "../store";
 import { styles } from "../styles";
 import { GalleryImage, User } from "../types";
@@ -69,7 +68,6 @@ export function ImageDetailScreen() {
         );
       }
       setError("");
-      recordDetailClick();
     } catch (e) {
       setError(getErrorMessage(e));
     } finally {
@@ -90,18 +88,6 @@ export function ImageDetailScreen() {
     } catch (e) {
       setFavorite(imageId, favorite);
       Alert.alert("Couldn’t update favourite", getErrorMessage(e));
-    }
-  };
-  const shareImage = async () => {
-    if (!image) return;
-    try {
-      await Share.share({
-        title: image.title,
-        message: `${image.title}\n${image.imageUrl ?? image.thumbnailUrl}`,
-      });
-      void imageApi.share(imageId, "system").catch(() => undefined);
-    } catch {
-      /* User cancelled. */
     }
   };
   if (loading || error || !image)
@@ -160,16 +146,6 @@ export function ImageDetailScreen() {
               color={favorite ? colors.danger : colors.text}
             />
           </Pressable>
-          <Pressable
-            onPress={shareImage}
-            style={[styles.iconButton, { backgroundColor: colors.surface }]}
-          >
-            <Ionicons
-              name="share-social-outline"
-              size={23}
-              color={colors.text}
-            />
-          </Pressable>
         </View>
         <View style={styles.stats}>
           <Text style={{ color: colors.muted }}>
@@ -199,7 +175,9 @@ export function ImageDetailScreen() {
           title="View prompt"
           icon="sparkles-outline"
           onPress={() =>
-            navigation.navigate("Prompt", { imageId, title: image.title })
+            void openPromptWithInterstitial(() =>
+              navigation.navigate("Prompt", { imageId, title: image.title }),
+            ).catch(() => undefined)
           }
         />
         <Button

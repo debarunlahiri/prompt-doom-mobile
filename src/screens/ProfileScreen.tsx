@@ -32,6 +32,7 @@ import {
   ScreenState,
 } from "../components";
 import { Header } from "../components/Header";
+import { GoogleSignInPrompt } from "../components/GoogleSignInPrompt";
 import { MenuRow } from "../components/MenuRow";
 import { PromptCard } from "../components/PromptCard";
 import { APP_NAME, LEGAL_CONTENT } from "../config";
@@ -77,40 +78,14 @@ export function ProfileScreen() {
         style={[styles.screen, { backgroundColor: colors.background }]}
       >
         <Header title="Profile" subtitle="Sync your creative collection" />
-        <View style={styles.profileGuest}>
-          <View
-            style={[styles.avatar, { backgroundColor: colors.primarySoft }]}
-          >
-            <Ionicons name="person-outline" size={40} color={colors.primary} />
-          </View>
-          <Text style={[styles.detailTitle, { color: colors.text }]}>
-            Your space awaits
-          </Text>
-          <Text style={{ color: colors.muted, textAlign: "center" }}>
-            Sign in to save favourites, reveal prompts, and view your history.
-          </Text>
-          <Button
-            colors={colors}
-            title="Sign in"
-            onPress={() => navigation.navigate("Login")}
-          />
-          <Button
-            colors={colors}
-            title="Create account"
-            variant="secondary"
-            onPress={() => navigation.navigate("Register")}
-          />
-        </View>
+        <GoogleSignInPrompt
+          colors={colors}
+          description="Continue with Google to save favourites, reveal prompts, and sync your history."
+        />
       </SafeAreaView>
     );
   const rows = [
     { label: "Edit profile", icon: "create-outline", screen: "EditProfile" },
-    { label: "Change password", icon: "key-outline", screen: "ChangePassword" },
-    {
-      label: "Notifications",
-      icon: "notifications-outline",
-      screen: "Notifications",
-    },
     { label: "Settings", icon: "settings-outline", screen: "Settings" },
   ] as const;
   return (

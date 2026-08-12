@@ -90,6 +90,13 @@ export const authApi = {
       tokens: data.data.tokens as Tokens,
     };
   },
+  google: async (idToken: string) => {
+    const { data } = await api.post("/auth/google", { idToken });
+    return {
+      user: data.data.user as User,
+      tokens: data.data.tokens as Tokens,
+    };
+  },
   logout: (refreshToken: string) => api.post("/auth/logout", { refreshToken }),
   forgotPassword: (email: string) =>
     api.post("/auth/forgot-password", { email }),
@@ -151,7 +158,11 @@ export const imageApi = {
     },
   addFavorite: (id: number) => api.post(`/images/${id}/favorite`),
   removeFavorite: (id: number) => api.delete(`/images/${id}/favorite`),
-  copy: (id: number) => api.post(`/images/${id}/copy`),
+  copy: (id: number) =>
+    api.post(`/images/${id}/copy`, {
+      platform: "mobile",
+      source: "prompt_screen",
+    }),
   share: (id: number, destination: string) =>
     api.post(`/images/${id}/share`, { destination }),
   report: (id: number, reason: string, details?: string) =>

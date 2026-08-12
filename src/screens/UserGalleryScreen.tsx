@@ -32,11 +32,12 @@ import {
   ScreenState,
 } from "../components";
 import { Header } from "../components/Header";
+import { GoogleSignInPrompt } from "../components/GoogleSignInPrompt";
 import { MenuRow } from "../components/MenuRow";
 import { PromptCard } from "../components/PromptCard";
 import { APP_NAME, LEGAL_CONTENT } from "../config";
 import { useColors } from "../hooks/useColors";
-import { maybeShowAd, recordDetailClick } from "../services/adService";
+import { openImageWithInterstitial } from "../services/adService";
 import { useAppStore } from "../store";
 import { styles } from "../styles";
 import { GalleryImage, User } from "../types";
@@ -109,14 +110,15 @@ export function UserGalleryScreen({ history = false }: { history?: boolean }) {
         style={[styles.screen, { backgroundColor: colors.background }]}
       >
         <Header title={history ? "History" : "Favourites"} />
-        <ScreenState colors={colors} empty="Sign in to see this collection" />
-        <View style={{ padding: 20 }}>
-          <Button
-            colors={colors}
-            title="Sign in"
-            onPress={() => navigation.navigate("Login")}
-          />
-        </View>
+        <GoogleSignInPrompt
+          colors={colors}
+          title={history ? "Your history awaits" : "Your favourites await"}
+          description={
+            history
+              ? "Continue with Google to sync and revisit the prompts you have explored."
+              : "Continue with Google to save and sync your favourite inspiration."
+          }
+        />
       </SafeAreaView>
     );
   return (
@@ -148,7 +150,9 @@ export function UserGalleryScreen({ history = false }: { history?: boolean }) {
           data={items}
           colors={colors}
           onPress={(item) =>
-            navigation.navigate("ImageDetail", { imageId: item.id })
+            void openImageWithInterstitial(() =>
+              navigation.navigate("ImageDetail", { imageId: item.id }),
+            ).catch(() => undefined)
           }
           onRefresh={() => load(1)}
           refreshing={loading}

@@ -32,11 +32,13 @@ import {
   ScreenState,
 } from "../components";
 import { Header } from "../components/Header";
+import { PasswordStrength } from "../components/PasswordStrength";
 import { MenuRow } from "../components/MenuRow";
 import { PromptCard } from "../components/PromptCard";
 import { APP_NAME, LEGAL_CONTENT } from "../config";
 import { useColors } from "../hooks/useColors";
 import { maybeShowAd, recordDetailClick } from "../services/adService";
+import { getGoogleIdToken } from "../services/googleAuth";
 import { useAppStore } from "../store";
 import { styles } from "../styles";
 import { GalleryImage, User } from "../types";
@@ -86,6 +88,96 @@ export function AuthScreen({ register = false }: { register?: boolean }) {
       setLoading(false);
     }
   };
+  const signInWithGoogle = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const idToken = await getGoogleIdToken();
+      if (!idToken) return;
+      const session = await authApi.google(idToken);
+      await setSession(session.user, session.tokens);
+      const targetId = route.params?.returnToImageId;
+      navigation.reset({
+        index: 0,
+        routes: targetId
+          ? [
+              { name: "Main" },
+              { name: "ImageDetail", params: { imageId: targetId } },
+            ]
+          : [{ name: "Main" }],
+      });
+    } catch (googleError) {
+      setError(getErrorMessage(googleError));
+    } finally {
+      setLoading(false);
+    }
+  };
+  if (!register)
+    return (
+      <View
+        style={[styles.authSheetOverlay, { backgroundColor: colors.overlay }]}
+      >
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Close sign in"
+          onPress={() => navigation.goBack()}
+          style={styles.authSheetBackdrop}
+        />
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
+          pointerEvents="box-none"
+          style={styles.authSheetKeyboard}
+        >
+          <SafeAreaView
+            edges={["bottom"]}
+            style={[styles.authSheet, { backgroundColor: colors.surface }]}
+          >
+            <View
+              style={[
+                styles.authSheetHandle,
+                { backgroundColor: colors.border },
+              ]}
+            />
+            <View style={styles.authSheetHeader}>
+              <View style={{ flex: 1 }}>
+                <Text style={[styles.authSheetTitle, { color: colors.text }]}>
+                  Welcome back
+                </Text>
+                <Text
+                  style={[styles.authSheetSubtitle, { color: colors.muted }]}
+                >
+                  Sign in to sync your prompts and favourites.
+                </Text>
+              </View>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="Close"
+                onPress={() => navigation.goBack()}
+                style={[
+                  styles.iconButton,
+                  { backgroundColor: colors.surfaceAlt },
+                ]}
+              >
+                <Ionicons name="close" size={22} color={colors.text} />
+              </Pressable>
+            </View>
+            {Platform.OS === "android" && (
+              <Button
+                colors={colors}
+                title={loading ? "Connecting…" : "Continue with Google"}
+                icon="logo-google"
+                variant="secondary"
+                onPress={signInWithGoogle}
+                disabled={loading}
+              />
+            )}
+            {error ? (
+              <Text style={{ color: colors.danger }}>{error}</Text>
+            ) : null}
+          </SafeAreaView>
+        </KeyboardAvoidingView>
+      </View>
+    );
   return (
     <SafeAreaView
       style={[styles.screen, { backgroundColor: colors.background }]}
@@ -94,9 +186,12 @@ export function AuthScreen({ register = false }: { register?: boolean }) {
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         style={styles.auth}
       >
-        <View style={[styles.logo, { backgroundColor: colors.primary }]}>
-          <Ionicons name="sparkles" size={30} color="#FFF" />
-        </View>
+        <Image
+          source={require("../../assets/prompt-doom-logo.png")}
+          style={styles.logoImage}
+          contentFit="contain"
+          accessibilityLabel="Prompt Doom logo"
+        />
         <Text style={[styles.authTitle, { color: colors.text }]}>
           {register ? "Create your account" : "Welcome back"}
         </Text>
@@ -132,6 +227,7 @@ export function AuthScreen({ register = false }: { register?: boolean }) {
           onChangeText={setPassword}
           secureTextEntry
         />
+        {register && <PasswordStrength password={password} colors={colors} />}
         {error ? <Text style={{ color: colors.danger }}>{error}</Text> : null}
         <Button
           colors={colors}
@@ -142,6 +238,16 @@ export function AuthScreen({ register = false }: { register?: boolean }) {
           onPress={submit}
           disabled={loading}
         />
+        {Platform.OS === "android" && (
+          <Button
+            colors={colors}
+            title="Continue with Google"
+            icon="logo-google"
+            variant="secondary"
+            onPress={signInWithGoogle}
+            disabled={loading}
+          />
+        )}
         {!register && (
           <Pressable onPress={() => navigation.navigate("ForgotPassword")}>
             <Text style={[styles.link, { color: colors.primary }]}>

@@ -1,11 +1,10 @@
-const rawApiUrl = process.env.EXPO_PUBLIC_API_URL?.trim();
-
-export const API_BASE_URL = rawApiUrl
-  ? rawApiUrl.replace(/\/$/, "")
-  : "http://192.168.0.158:8080/prompt-doom/api/v1";
+// Previous local API base URL: http://192.168.0.158:8080/prompt-doom/api/v1
+export const API_BASE_URL = "https://promptdoom.com/api/v1";
 
 export const PAGE_SIZE = 20;
 export const APP_NAME = "Prompt Doom";
+export const GOOGLE_WEB_CLIENT_ID =
+  process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID?.trim() ?? "";
 
 export const ANDROID_AD_UNITS = {
   banner: "ca-app-pub-6583919661089892/6767673576",

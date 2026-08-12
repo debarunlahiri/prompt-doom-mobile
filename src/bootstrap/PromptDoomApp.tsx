@@ -15,8 +15,8 @@ export function PromptDoomApp() {
   const setUser = useAppStore((state) => state.setUser);
 
   useEffect(() => {
-    void hydrate();
-    void initializeMobileAds();
+    void hydrate().catch(() => undefined);
+    void initializeMobileAds().catch(() => false);
   }, [hydrate]);
 
   useEffect(() => {
