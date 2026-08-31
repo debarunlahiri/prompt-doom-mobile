@@ -23,7 +23,7 @@
         "foregroundImage": "./assets/android-icon-foreground.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.promptdoom.mobile"
+      "package": "com.prompt_doom.android"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -47,7 +47,9 @@
         "expo-build-properties",
         {
           "android": {
-            "usesCleartextTraffic": true
+            "compileSdkVersion": 36,
+            "targetSdkVersion": 36,
+            "usesCleartextTraffic": false
           }
         }
       ],

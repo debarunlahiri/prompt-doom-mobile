@@ -85,6 +85,11 @@ export function ProfileScreen() {
       </SafeAreaView>
     );
   const rows = [
+    {
+      label: "Ad-free subscription",
+      icon: "diamond-outline",
+      screen: "Subscriptions",
+    },
     { label: "Edit profile", icon: "create-outline", screen: "EditProfile" },
     { label: "Settings", icon: "settings-outline", screen: "Settings" },
   ] as const;

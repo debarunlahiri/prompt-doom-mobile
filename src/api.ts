@@ -10,6 +10,8 @@ import {
   Pagination,
   Tokens,
   User,
+  SubscriptionPlan,
+  UserSubscription,
 } from "./types";
 
 export const api = axios.create({ baseURL: API_BASE_URL, timeout: 20_000 });
@@ -182,4 +184,41 @@ export const adsApi = {
     placement: string;
     metadata?: Record<string, unknown>;
   }) => api.post("/ads/events", body),
+};
+
+export const subscriptionApi = {
+  list: async () => {
+    const { data } = await api.get("/subscriptions");
+    return data.data as {
+      plans: SubscriptionPlan[];
+      subscription: UserSubscription | null;
+      adsDisabled: boolean;
+      renewalReminderDue: boolean;
+      renewalReminderDays: number;
+    };
+  },
+  checkout: async (planId: number) => {
+    const { data } = await api.post("/subscriptions/checkout", { planId });
+    return data.data as {
+      keyId: string;
+      subscriptionId: string;
+      businessName: string;
+      description: string;
+      amountPaise: number;
+      currency: string;
+      prefill: { name: string; email: string; contact?: string };
+      theme: { color: string };
+    };
+  },
+  verify: (
+    paymentId: string,
+    subscriptionId: string,
+    signature: string,
+  ) =>
+    api.post("/subscriptions/verify", {
+      paymentId,
+      subscriptionId,
+      signature,
+    }),
+  cancel: () => api.post("/subscriptions/cancel"),
 };

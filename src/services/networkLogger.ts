@@ -28,12 +28,14 @@ function sanitize(value: unknown, seen = new WeakSet<object>()): unknown {
   }
 
   return Object.fromEntries(
-    Object.entries(value as Record<string, unknown>).map(([key, item]) => [
-      key,
-      sensitiveKeys.has(key.toLowerCase())
-        ? "[REDACTED]"
-        : sanitize(item, seen),
-    ]),
+    Object.entries(value as Record<string, unknown>)
+      .filter(([, item]) => item !== undefined)
+      .map(([key, item]) => [
+        key,
+        sensitiveKeys.has(key.toLowerCase())
+          ? "[REDACTED]"
+          : sanitize(item, seen),
+      ]),
   );
 }
 
@@ -58,12 +60,14 @@ export function attachNetworkLogger(client: AxiosInstance) {
 
   client.interceptors.request.use((config: TimedRequestConfig) => {
     config.networkStartedAt = Date.now();
-    console.log("🌐 API REQUEST", {
+    console.log("API REQUEST", {
       method: config.method?.toUpperCase(),
       fullUrl: fullUrl(client, config),
-      params: sanitize(config.params),
       headers: sanitize(config.headers),
-      body: sanitize(config.data),
+      ...(config.params !== undefined
+        ? { params: sanitize(config.params) }
+        : {}),
+      ...(config.data !== undefined ? { body: sanitize(config.data) } : {}),
     });
     return config;
   });
@@ -71,7 +75,7 @@ export function attachNetworkLogger(client: AxiosInstance) {
   client.interceptors.response.use(
     (response) => {
       const config = response.config as TimedRequestConfig;
-      console.log("✅ API RESPONSE", {
+      console.log("API RESPONSE", {
         method: config.method?.toUpperCase(),
         fullUrl: fullUrl(client, config),
         status: response.status,
@@ -83,15 +87,19 @@ export function attachNetworkLogger(client: AxiosInstance) {
     },
     (error) => {
       const config = error.config as TimedRequestConfig | undefined;
-      console.log("❌ API ERROR", {
+      console.log("API ERROR", {
         method: config?.method?.toUpperCase(),
         fullUrl: fullUrl(client, config),
         status: error.response?.status,
         duration: duration(config),
         code: error.code,
         message: error.message,
-        requestParams: sanitize(config?.params),
-        requestBody: sanitize(config?.data),
+        ...(config?.params !== undefined
+          ? { requestParams: sanitize(config.params) }
+          : {}),
+        ...(config?.data !== undefined
+          ? { requestBody: sanitize(config.data) }
+          : {}),
         responseHeaders: sanitize(error.response?.headers),
         responseData: sanitize(error.response?.data),
       });

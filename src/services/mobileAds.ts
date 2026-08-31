@@ -21,8 +21,13 @@ export function getMobileAdsModule(): Promise<MobileAdsModule | null> {
 export async function initializeMobileAds(): Promise<boolean> {
   try {
     const mobileAdsModule = await getMobileAdsModule();
-    const mobileAds = mobileAdsModule?.default;
+    if (!mobileAdsModule) return false;
+
+    const mobileAds = mobileAdsModule.default;
     if (typeof mobileAds !== "function") return false;
+
+    const consentInfo = await mobileAdsModule.AdsConsent.gatherConsent();
+    if (!consentInfo.canRequestAds) return false;
 
     const adsInstance = mobileAds();
     if (typeof adsInstance?.initialize !== "function") return false;

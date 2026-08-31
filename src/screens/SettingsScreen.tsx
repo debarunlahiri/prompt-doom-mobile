@@ -12,6 +12,7 @@ import {
   Alert,
   FlatList,
   KeyboardAvoidingView,
+  Linking,
   Platform,
   Pressable,
   RefreshControl,
@@ -34,7 +35,12 @@ import {
 import { Header } from "../components/Header";
 import { MenuRow } from "../components/MenuRow";
 import { PromptCard } from "../components/PromptCard";
-import { APP_NAME, LEGAL_CONTENT } from "../config";
+import {
+  ACCOUNT_DELETION_URL,
+  APP_NAME,
+  DATA_DELETION_URL,
+  LEGAL_CONTENT,
+} from "../config";
 import { useColors } from "../hooks/useColors";
 import { maybeShowAd, recordDetailClick } from "../services/adService";
 import { useAppStore } from "../store";
@@ -52,6 +58,16 @@ export function SettingsScreen() {
     (state) => state.setNotificationsEnabled,
   );
   const options = ["system", "light", "dark"] as const;
+  const openDeletionPage = async (url: string) => {
+    try {
+      await Linking.openURL(url);
+    } catch {
+      Alert.alert(
+        "Unable to open deletion page",
+        "Please visit promptdoom.com/app/ in your browser.",
+      );
+    }
+  };
   return (
     <SafeAreaView
       style={[styles.screen, { backgroundColor: colors.background }]}
@@ -129,6 +145,20 @@ export function SettingsScreen() {
             onPress={() => navigation.navigate("Legal", { page })}
           />
         ))}
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>Data</Text>
+        <MenuRow
+          colors={colors}
+          label="Delete account and data"
+          icon="trash-outline"
+          danger
+          onPress={() => void openDeletionPage(ACCOUNT_DELETION_URL)}
+        />
+        <MenuRow
+          colors={colors}
+          label="Delete personal data only"
+          icon="shield-outline"
+          onPress={() => void openDeletionPage(DATA_DELETION_URL)}
+        />
       </ScrollView>
     </SafeAreaView>
   );

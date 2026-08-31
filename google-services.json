@@ -88,6 +88,42 @@
     },
     {
       "client_info": {
+        "mobilesdk_app_id": "1:881085821671:android:f3a8a636bda385dca8e842",
+        "android_client_info": {
+          "package_name": "com.earnwithfreelancing.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "881085821671-n6otiadftnv8mjj0e2f5f7gnn8rohc3c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxCL8UST4xw-grSqmgA-8HXdlqCU8KJ9o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "881085821671-erlvrgpgmvl85djmfs9ef23grvlq9gml.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "881085821671-49iahsov5jjgh4bbnjbr2ok783qfcets.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.debarunlahiri.earnmoney"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:881085821671:android:8346d31c9ea0d054a8e842",
         "android_client_info": {
           "package_name": "com.lambrk.messenger"
@@ -132,9 +168,9 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:881085821671:android:6fdbbc35eef66ca8a8e842",
+        "mobilesdk_app_id": "1:881085821671:android:db4aaaba9527e1c3a8e842",
         "android_client_info": {
-          "package_name": "com.promptdoom.mobile"
+          "package_name": "com.prompt_doom.android"
         }
       },
       "oauth_client": [

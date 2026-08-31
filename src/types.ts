@@ -58,6 +58,29 @@ export interface AdConfig {
   showAfterClicks: number;
   minIntervalSeconds: number;
   maxAdsPerSession: number;
+  subscriptionActive?: boolean;
+}
+
+export interface SubscriptionPlan {
+  id: number;
+  name: string;
+  description?: string;
+  amountPaise: number;
+  currency: string;
+  billingInterval: number;
+  billingPeriod: "daily" | "weekly" | "monthly" | "yearly";
+  features: string[];
+}
+
+export interface UserSubscription {
+  id: number;
+  planId: number;
+  status: string;
+  planName: string;
+  accessActive: boolean;
+  cancelAtCycleEnd: boolean;
+  currentEndAt?: string | null;
+  nextChargeAt?: string | null;
 }
 
 export interface HistoryPage {
@@ -81,6 +104,7 @@ export type RootStackParamList = {
   ChangePassword: undefined;
   Notifications: undefined;
   Settings: undefined;
+  Subscriptions: undefined;
   Legal: { page: "privacy" | "terms" | "about" };
   Report: { imageId: number };
 };

@@ -20,6 +20,7 @@ import { PasswordFlowScreen } from "../screens/PasswordFlowScreen";
 import { PromptScreen } from "../screens/PromptScreen";
 import { ReportScreen } from "../screens/ReportScreen";
 import { SettingsScreen } from "../screens/SettingsScreen";
+import { SubscriptionsScreen } from "../screens/SubscriptionsScreen";
 import { darkColors } from "../theme";
 import { RootStackParamList } from "../types";
 import { formatSlug } from "../utils/format";
@@ -127,6 +128,11 @@ export function AppNavigator() {
           name="Settings"
           component={SettingsScreen}
           options={{ title: "Settings" }}
+        />
+        <Stack.Screen
+          name="Subscriptions"
+          component={SubscriptionsScreen}
+          options={{ title: "Ad-free subscription" }}
         />
         <Stack.Screen
           name="Legal"
