@@ -31,6 +31,7 @@ import {
   ImageGrid,
   ScreenState,
 } from "../components";
+import { AmbientBackground } from "../components/AmbientBackground";
 import { Header } from "../components/Header";
 import { GoogleSignInPrompt } from "../components/GoogleSignInPrompt";
 import { MenuRow } from "../components/MenuRow";
@@ -107,8 +108,9 @@ export function UserGalleryScreen({ history = false }: { history?: boolean }) {
   if (!user)
     return (
       <SafeAreaView
-        style={[styles.screen, { backgroundColor: colors.background }]}
+        style={[styles.ambientScreen, { backgroundColor: colors.background }]}
       >
+        <AmbientBackground />
         <Header title={history ? "History" : "Favourites"} />
         <GoogleSignInPrompt
           colors={colors}
@@ -123,8 +125,9 @@ export function UserGalleryScreen({ history = false }: { history?: boolean }) {
     );
   return (
     <SafeAreaView
-      style={[styles.screen, { backgroundColor: colors.background }]}
+      style={[styles.ambientScreen, { backgroundColor: colors.background }]}
     >
+      <AmbientBackground />
       <Header
         title={history ? "Recently viewed" : "Favourites"}
         subtitle={

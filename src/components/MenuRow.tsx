@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import { Pressable, Text } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import { styles } from "../styles";
 import { AppColors } from "../theme";
 
@@ -18,12 +18,24 @@ export function MenuRow({
   danger?: boolean;
 }) {
   return (
-    <Pressable onPress={onPress} style={styles.menuRow}>
-      <Ionicons
-        name={icon}
-        size={22}
-        color={danger ? colors.danger : colors.primary}
-      />
+    <Pressable
+      onPress={onPress}
+      style={({ pressed }) => [styles.menuRow, { opacity: pressed ? 0.65 : 1 }]}
+    >
+      <View
+        style={[
+          styles.menuIcon,
+          {
+            backgroundColor: danger ? `${colors.danger}14` : colors.primarySoft,
+          },
+        ]}
+      >
+        <Ionicons
+          name={icon}
+          size={20}
+          color={danger ? colors.danger : colors.primary}
+        />
+      </View>
       <Text
         style={{
           color: danger ? colors.danger : colors.text,

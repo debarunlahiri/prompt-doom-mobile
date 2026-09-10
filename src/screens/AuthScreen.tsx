@@ -187,7 +187,7 @@ export function AuthScreen({ register = false }: { register?: boolean }) {
         style={styles.auth}
       >
         <Image
-          source={require("../../assets/prompt-doom-logo.png")}
+          source={require("../../assets/icon.png")}
           style={styles.logoImage}
           contentFit="contain"
           accessibilityLabel="Prompt Doom logo"

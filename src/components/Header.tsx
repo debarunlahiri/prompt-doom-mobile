@@ -33,7 +33,7 @@ export function Header({
       )}
       {showLogo && !onBack && (
         <Image
-          source={require("../../assets/prompt-doom-logo.png")}
+          source={require("../../assets/icon.png")}
           style={styles.headerLogo}
           contentFit="contain"
           accessibilityLabel="Prompt Doom logo"

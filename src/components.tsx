@@ -146,35 +146,86 @@ export function ImageCard({
   item,
   colors,
   onPress,
+  layout = "standard",
 }: {
   item: GalleryImage;
   colors: AppColors;
   onPress: () => void;
+  layout?: "standard" | "slideshow";
 }) {
+  const isSlideshow = layout === "slideshow";
+  const imageSource = { uri: item.thumbnailUrl || item.imageUrl };
+
   return (
     <Pressable
       onPress={onPress}
       style={({ pressed }) => [
         styles.card,
-        { backgroundColor: colors.surface, opacity: pressed ? 0.84 : 1 },
+        {
+          backgroundColor: colors.surface,
+          borderColor: colors.border,
+          shadowColor: colors.shadow,
+          opacity: pressed ? 0.88 : 1,
+          transform: [{ scale: pressed ? 0.985 : 1 }],
+        },
       ]}
     >
-      <Image
-        source={{ uri: item.thumbnailUrl || item.imageUrl }}
-        style={styles.cardImage}
-        contentFit="cover"
-        transition={180}
-        cachePolicy="memory-disk"
-      />
+      {isSlideshow ? (
+        <View
+          style={[
+            styles.slideshowMedia,
+            { backgroundColor: colors.surfaceAlt },
+          ]}
+        >
+          <Image
+            source={imageSource}
+            style={StyleSheet.absoluteFillObject}
+            contentFit="cover"
+            contentPosition="center"
+            blurRadius={28}
+            cachePolicy="memory-disk"
+          />
+          <View
+            style={[
+              StyleSheet.absoluteFillObject,
+              { backgroundColor: `${colors.surface}38` },
+            ]}
+          />
+          <Image
+            source={imageSource}
+            style={styles.slideshowForeground}
+            contentFit="cover"
+            contentPosition="center"
+            transition={180}
+            cachePolicy="memory-disk"
+          />
+        </View>
+      ) : (
+        <Image
+          source={imageSource}
+          style={[styles.cardImage, { backgroundColor: colors.surfaceAlt }]}
+          contentFit="cover"
+          contentPosition="center"
+          transition={180}
+          cachePolicy="memory-disk"
+        />
+      )}
+      <View
+        style={[styles.categoryBadge, { backgroundColor: colors.primarySoft }]}
+      >
+        <Text
+          numberOfLines={1}
+          style={[styles.categoryBadgeText, { color: colors.primary }]}
+        >
+          {item.category?.name ?? item.aiModel ?? "Inspiration"}
+        </Text>
+      </View>
       <View style={styles.cardBody}>
         <Text
           numberOfLines={1}
           style={[styles.cardTitle, { color: colors.text }]}
         >
           {item.title}
-        </Text>
-        <Text numberOfLines={1} style={[styles.meta, { color: colors.muted }]}>
-          {item.category?.name ?? item.aiModel ?? "AI artwork"}
         </Text>
       </View>
     </Pressable>
@@ -233,9 +284,9 @@ const styles = StyleSheet.create({
   stateTitle: { fontSize: 19, fontWeight: "700", textAlign: "center" },
   stateText: { fontSize: 14, textAlign: "center", lineHeight: 20 },
   button: {
-    minHeight: 48,
-    paddingHorizontal: 18,
-    borderRadius: 15,
+    minHeight: 52,
+    paddingHorizontal: 20,
+    borderRadius: 17,
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
@@ -256,11 +307,36 @@ const styles = StyleSheet.create({
   input: { flex: 1, fontSize: 16, paddingVertical: 12 },
   error: { fontSize: 12 },
   grid: { padding: 16, paddingBottom: 36 },
-  gridRow: { gap: 12 },
-  card: { flex: 1, borderRadius: 18, overflow: "hidden", marginBottom: 12 },
+  gridRow: { gap: 13 },
+  card: {
+    flex: 1,
+    borderWidth: 1,
+    borderRadius: 21,
+    overflow: "hidden",
+    marginBottom: 13,
+    shadowOffset: { width: 0, height: 7 },
+    shadowOpacity: 0.1,
+    shadowRadius: 16,
+    elevation: 3,
+  },
   cardImage: { width: "100%", aspectRatio: 0.86, backgroundColor: "#D8D5DF" },
-  cardBody: { padding: 11, gap: 3 },
-  cardTitle: { fontSize: 14, fontWeight: "700" },
-  meta: { fontSize: 12 },
+  slideshowMedia: {
+    width: "100%",
+    aspectRatio: 16 / 10,
+    overflow: "hidden",
+  },
+  slideshowForeground: { width: "100%", height: "100%" },
+  categoryBadge: {
+    position: "absolute",
+    top: 10,
+    left: 10,
+    maxWidth: "76%",
+    paddingHorizontal: 9,
+    paddingVertical: 6,
+    borderRadius: 999,
+  },
+  categoryBadgeText: { fontSize: 10, fontWeight: "800" },
+  cardBody: { padding: 12 },
+  cardTitle: { fontSize: 14, fontWeight: "800", letterSpacing: -0.15 },
   footer: { paddingVertical: 20 },
 });

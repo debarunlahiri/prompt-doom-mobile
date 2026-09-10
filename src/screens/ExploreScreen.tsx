@@ -31,6 +31,7 @@ import {
   ImageGrid,
   ScreenState,
 } from "../components";
+import { AmbientBackground } from "../components/AmbientBackground";
 import { Header } from "../components/Header";
 import { MenuRow } from "../components/MenuRow";
 import { PromptCard } from "../components/PromptCard";
@@ -54,8 +55,9 @@ export function ExploreScreen({ showHeader = true }: { showHeader?: boolean }) {
   const results = usePagedImages({ q: submitted || undefined, category, tag });
   return (
     <SafeAreaView
-      style={[styles.screen, { backgroundColor: colors.background }]}
+      style={[styles.ambientScreen, { backgroundColor: colors.background }]}
     >
+      <AmbientBackground />
       {showHeader && (
         <Header
           onBack={

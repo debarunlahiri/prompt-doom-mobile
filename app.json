@@ -2,11 +2,11 @@
   "expo": {
     "name": "Prompt Doom",
     "slug": "prompt-doom-mobile",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#FFFFFF"
     },
@@ -14,7 +14,8 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.promptdoom.mobile"
+      "bundleIdentifier": "com.promptdoom.mobile",
+      "buildNumber": "2"
     },
     "android": {
       "googleServicesFile": "./google-services.json",
@@ -23,10 +24,11 @@
         "foregroundImage": "./assets/android-icon-foreground.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.prompt_doom.android"
+      "package": "com.prompt_doom.android",
+      "versionCode": 2
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/icon.png"
     },
     "plugins": [
       "./plugins/withAndroidApkName",
@@ -49,7 +51,7 @@
           "android": {
             "compileSdkVersion": 36,
             "targetSdkVersion": 36,
-            "usesCleartextTraffic": false
+            "usesCleartextTraffic": true
           }
         }
       ],

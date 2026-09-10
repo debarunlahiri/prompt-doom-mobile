@@ -38,6 +38,7 @@ import {
   ImageGrid,
   ScreenState,
 } from "../components";
+import { AmbientBackground } from "../components/AmbientBackground";
 import { Header } from "../components/Header";
 import { MenuRow } from "../components/MenuRow";
 import { PromptCard } from "../components/PromptCard";
@@ -118,6 +119,7 @@ function TrendingCarousel({
             <ImageCard
               item={item}
               colors={colors}
+              layout="slideshow"
               onPress={() => onPress(item)}
             />
           </View>
@@ -228,8 +230,9 @@ export function HomeScreen() {
     );
   return (
     <SafeAreaView
-      style={[styles.screen, { backgroundColor: colors.background }]}
+      style={[styles.ambientScreen, { backgroundColor: colors.background }]}
     >
+      <AmbientBackground />
       <ScrollView
         refreshControl={
           <RefreshControl
@@ -244,7 +247,7 @@ export function HomeScreen() {
           title={APP_NAME}
           subtitle="Discover ideas worth creating"
           showLogo
-          action={
+          /* action={
             <Pressable
               onPress={() => navigation.navigate("Notifications")}
               style={[styles.iconButton, { backgroundColor: colors.surface }]}
@@ -255,7 +258,7 @@ export function HomeScreen() {
                 color={colors.text}
               />
             </Pressable>
-          }
+          } */
         />
         <Pressable
           onPress={() => navigation.navigate("Search")}

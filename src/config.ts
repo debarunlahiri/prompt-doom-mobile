@@ -7,17 +7,20 @@ const publicEnv = (value: string | undefined, name: string) => {
 };
 
 export const API_BASE_URL = publicEnv(
-  process.env.EXPO_PUBLIC_API_URL,
-  "EXPO_PUBLIC_API_URL",
+  __DEV__
+    ? process.env.EXPO_PUBLIC_DEVELOPMENT_API_URL
+    : process.env.EXPO_PUBLIC_API_URL,
+  __DEV__ ? "EXPO_PUBLIC_DEVELOPMENT_API_URL" : "EXPO_PUBLIC_API_URL",
 ).replace(/\/$/, "");
 
 export const PAGE_SIZE = 20;
 export const APP_NAME = "Prompt Doom";
-export const PRIVACY_URL = "https://promptdoom.com/app/privacy/";
-export const TERMS_URL = "https://promptdoom.com/app/terms/";
+export const PRIVACY_URL = "https://app.promptdoom.com/app/privacy/";
+export const TERMS_URL = "https://app.promptdoom.com/app/terms/";
 export const ACCOUNT_DELETION_URL =
-  "https://promptdoom.com/app/account-deletion/";
-export const DATA_DELETION_URL = "https://promptdoom.com/app/data-deletion/";
+  "https://app.promptdoom.com/app/account-deletion/";
+export const DATA_DELETION_URL =
+  "https://app.promptdoom.com/app/data-deletion/";
 export const GOOGLE_WEB_CLIENT_ID =
   process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID?.trim() ?? "";
 
@@ -47,7 +50,7 @@ We use information to authenticate accounts, synchronise favourites and history,
 
 We retain information only as needed for the service, security, fraud prevention, payments, disputes, tax, accounting, and legal compliance. You may request deletion of eligible personal data or your account and associated data through the Prompt Doom privacy centre. Verified deletion requests are scheduled for completion after the stated 14-day processing period, subject to limited lawful retention.
 
-Prompt Doom is not directed to children under 13. The complete current Privacy Policy and deletion request forms are available at https://promptdoom.com/app/privacy/.`,
+Prompt Doom is not directed to children under 13. The complete current Privacy Policy and deletion request forms are available at https://app.promptdoom.com/app/privacy/.`,
   },
   terms: {
     title: "Terms and Conditions",
@@ -65,7 +68,7 @@ Payments are generally non-refundable after a paid period begins except where re
 
 The service and third-party features may change or become unavailable. Content is provided on an available basis, and you must review prompts and images before relying on or publishing them. Prompt Doom may restrict accounts used for abuse, fraud, security attacks, unlawful activity, or material violations of these terms.
 
-The complete current Terms and Conditions are available at https://promptdoom.com/app/terms/.`,
+The complete current Terms and Conditions are available at https://app.promptdoom.com/app/terms/.`,
   },
   about: {
     title: "About Prompt Doom",

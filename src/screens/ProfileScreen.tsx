@@ -31,6 +31,7 @@ import {
   ImageGrid,
   ScreenState,
 } from "../components";
+import { AmbientBackground } from "../components/AmbientBackground";
 import { Header } from "../components/Header";
 import { GoogleSignInPrompt } from "../components/GoogleSignInPrompt";
 import { MenuRow } from "../components/MenuRow";
@@ -75,8 +76,9 @@ export function ProfileScreen() {
   if (!user)
     return (
       <SafeAreaView
-        style={[styles.screen, { backgroundColor: colors.background }]}
+        style={[styles.ambientScreen, { backgroundColor: colors.background }]}
       >
+        <AmbientBackground />
         <Header title="Profile" subtitle="Sync your creative collection" />
         <GoogleSignInPrompt
           colors={colors}
@@ -95,26 +97,64 @@ export function ProfileScreen() {
   ] as const;
   return (
     <SafeAreaView
-      style={[styles.screen, { backgroundColor: colors.background }]}
+      style={[styles.ambientScreen, { backgroundColor: colors.background }]}
     >
+      <AmbientBackground />
       <ScrollView>
         <Header title="Profile" />
-        <View style={styles.profileTop}>
-          {user.avatarUrl ? (
-            <Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
-          ) : (
-            <View style={[styles.avatar, { backgroundColor: colors.primary }]}>
-              <Text style={styles.avatarText}>
-                {user.name.slice(0, 1).toUpperCase()}
-              </Text>
-            </View>
-          )}
+        <View
+          style={[
+            styles.profileTop,
+            { backgroundColor: colors.surface, borderColor: colors.border },
+          ]}
+        >
+          <View
+            style={[
+              styles.avatarRing,
+              {
+                backgroundColor: colors.primarySoft,
+                borderColor: `${colors.primary}35`,
+              },
+            ]}
+          >
+            {user.avatarUrl ? (
+              <Image
+                source={{ uri: user.avatarUrl }}
+                style={styles.avatar}
+                contentFit="cover"
+              />
+            ) : (
+              <View
+                style={[styles.avatar, { backgroundColor: colors.primary }]}
+              >
+                <Text style={styles.avatarText}>
+                  {user.name.slice(0, 1).toUpperCase()}
+                </Text>
+              </View>
+            )}
+          </View>
           <Text style={[styles.detailTitle, { color: colors.text }]}>
             {user.name}
           </Text>
           <Text style={{ color: colors.muted }}>{user.email}</Text>
+          <View
+            style={[
+              styles.profileBadge,
+              { backgroundColor: colors.primarySoft },
+            ]}
+          >
+            <Ionicons name="sparkles" size={14} color={colors.primary} />
+            <Text style={{ color: colors.primary, fontWeight: "800" }}>
+              Creative profile
+            </Text>
+          </View>
         </View>
-        <View style={[styles.menu, { backgroundColor: colors.surface }]}>
+        <View
+          style={[
+            styles.menu,
+            { backgroundColor: colors.surface, borderColor: colors.border },
+          ]}
+        >
           {rows.map((row) => (
             <MenuRow
               key={row.label}

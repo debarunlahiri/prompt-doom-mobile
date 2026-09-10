@@ -34,9 +34,15 @@ export function MainTabs() {
         tabBarStyle: {
           backgroundColor: colors.surface,
           borderTopColor: colors.border,
-          height: 58 + bottomPadding,
-          paddingBottom: bottomPadding,
-          paddingTop: 7,
+          borderTopWidth: 1,
+          height: 64 + bottomPadding,
+          paddingBottom: bottomPadding + 2,
+          paddingTop: 9,
+          shadowColor: colors.shadow,
+          shadowOffset: { width: 0, height: -4 },
+          shadowOpacity: 0.08,
+          shadowRadius: 14,
+          elevation: 12,
         },
         tabBarItemStyle: {
           paddingBottom: 2,
@@ -45,9 +51,13 @@ export function MainTabs() {
           <Ionicons
             name={icons[route.name][focused ? 1 : 0]}
             color={color}
-            size={size}
+            size={focused ? size + 2 : size}
           />
         ),
+        tabBarLabelStyle: {
+          fontSize: 11,
+          fontWeight: "700",
+        },
       })}
     >
       <Tabs.Screen name="Home" component={HomeScreen} />

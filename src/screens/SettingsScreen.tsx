@@ -64,7 +64,7 @@ export function SettingsScreen() {
     } catch {
       Alert.alert(
         "Unable to open deletion page",
-        "Please visit promptdoom.com/app/ in your browser.",
+        "Please visit app.promptdoom.com/app/ in your browser.",
       );
     }
   };
