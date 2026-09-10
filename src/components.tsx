@@ -179,7 +179,7 @@ export function ImageCard({
         >
           <Image
             source={imageSource}
-            style={StyleSheet.absoluteFillObject}
+            style={StyleSheet.absoluteFill}
             contentFit="cover"
             contentPosition="center"
             blurRadius={28}
@@ -187,7 +187,7 @@ export function ImageCard({
           />
           <View
             style={[
-              StyleSheet.absoluteFillObject,
+              StyleSheet.absoluteFill,
               { backgroundColor: `${colors.surface}38` },
             ]}
           />
